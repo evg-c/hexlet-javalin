@@ -12,3 +12,5 @@ bin
 .classpath
 
 .idea
+.DS_Store
+
