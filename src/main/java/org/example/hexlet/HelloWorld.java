@@ -7,14 +7,14 @@ public class HelloWorld {
           // создаем приложение
           var app = Javalin.create(config -> config.bundledPlugins.enableDevLogging());
           // описываем 
-          app.get("/hello", ctx -> {
-              var name = ctx.queryParam("name");
-              //if (ctx.queryParam("name").isEmpty()) {
-              if ((name == null) || (name.isEmpty())) {
-                    name = "World";
-              }
-              ctx.result("Hello, " + name);
+          // Обратите внимание, что id — это не обязательно число
+
+          // Название параметров мы выбрали произвольно
+          app.get("/users/{id}/post/{postId}", ctx -> {
+             ctx.result("User ID: " + ctx.pathParam("id") + "   Post ID: " + ctx.pathParam("postId"));
+             // ctx.result("Lesson ID: " + ctx.pathParam("id"));
           });
+
           app.start(7070);
      }
 }
