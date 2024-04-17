@@ -30,8 +30,10 @@ dependencies {
 	implementation("org.slf4j:slf4j-simple:2.0.7")
 	implementation("io.javalin:javalin-rendering:6.1.3")
 	implementation("gg.jte:jte:3.1.9")
+	implementation("io.javalin:javalin-rendering:6.1.3")
+	implementation("org.projectlombok:lombok:1.18.22")
 	testImplementation(platform("org.junit:junit-bom:5.9.1"))
-	testImplementation("org.junit.yupiter:junit-yupiter")
+	testImplementation("org.junit.jupiter:junit-jupiter")
 }
 
 tasks.test {
