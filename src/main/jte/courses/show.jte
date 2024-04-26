@@ -1,5 +1,5 @@
 <!-- src/main/jte/courses/show.jte -->
-@import org.example.hexlet.dto.courses.CoursesPage
+@import org.example.hexlet.dto.courses.CoursePage
 @param CoursePage page
 <!DOCTYPE html>
 <html lang="en">
