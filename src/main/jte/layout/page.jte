@@ -4,6 +4,7 @@
 
 @param Content content
 @param CoursesPage page
+@param Content footer
 
 <!DOCTYPE html>
 <html lang="en">
@@ -12,6 +13,11 @@
         <meta name="view-port" content="width=device-width, initial-scale=1" />
         <title>Hexlet Javalin Example</title>
         <h1>${page.getHeader()}</h1>
+        <nav>
+            <ul>
+                <li><a href="/">Home</a></li>
+            </ul>
+        </nav>
     </head>
     <body>
         <p>
@@ -20,5 +26,10 @@
         <div class="content">
             ${content}
         </div>
+        @if(footer != null)
+            <div class="footer">
+                ${footer}
+            </div>
+        @endif
     </body>
 </html>
