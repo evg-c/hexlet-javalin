@@ -10,6 +10,7 @@ import org.example.hexlet.dto.courses.CoursesPage;
 import org.example.hexlet.model.Course;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class HelloWorld {
      public static void main(String[] args) {
@@ -41,7 +42,14 @@ public class HelloWorld {
                        new Course("JavaScript", "Программирование на JavaScript", 2),
                        new Course("Go", "Программирование на Go", 3));
                var header = "Курсы по программированию";
-               var page = new CoursesPage(courses, header);
+               List<Course> coursesTerm;
+               var term = ctx.queryParam("term");
+               if (term != null) {
+                    coursesTerm = findCoursesTerm(courses, term);
+               } else {
+                    coursesTerm = courses;
+               }
+               var page = new CoursesPage(coursesTerm, header, term);
                ctx.render("courses/index.jte", model("page", page));
           });
 
@@ -51,11 +59,16 @@ public class HelloWorld {
      }
 
      public static Course findCourse(List<Course> listCourses, long idCourse) {
-          Course courseWithId = listCourses.stream()
+          return listCourses.stream()
                   .filter(u -> idCourse == u.getId())
                   .findFirst()
                   .orElse(null);
-          return courseWithId;
+     }
+
+     public static List<Course> findCoursesTerm(List<Course> listCourses, String term) {
+          return listCourses.stream()
+                  .filter(u -> u.getName().equalsIgnoreCase(term))
+                  .collect(Collectors.toList());
      }
 }
 
