@@ -10,11 +10,23 @@
         @else
             @for(var course : page.getCourses())
                 <div>
-                    <h2><a href="/courses/${course.getId()}">${course.getName()}</a></h2>
-                    <p>${course.getDescription()}</p>
+<!--                     <h2><a href="/courses/${course.getId()}">${course.getName()}</a></h2> -->
+<!--                     <p>${course.getDescription()}</p>                                     -->
+                    <tr>
+                        <td>
+                            ${course.getId()}
+                        </td>
+                        <td>
+                            <a href="/courses/${course.getId()}">${course.getName()}  ${course.getDescription()}</a>
+                        </td>
+                    </tr>
                 </div>
             @endfor
         @endif
+        <form action="/courses" method="get">
+            <input type="search" required name="term" value="${page.getTerm()}" />
+            <input type="submit" value="Искать" />
+        </form>
     `,
     footer = @`
         <p>Thank for visiting, come again soon!</p>
