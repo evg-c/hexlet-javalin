@@ -16,7 +16,7 @@ plugins {
 }
 
 application {
-	mainClass.set("org.example.hexlet.HelloWorld")
+	mainClass.set("org.example.hexlet.HelloJavalin")
 }
 
 group = "org.example"
