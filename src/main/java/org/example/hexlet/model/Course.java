@@ -21,15 +21,21 @@ public class Course {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public Course(String name, String description) {
+        this.name = name;
+        this.description = description;
+        this.id = id;
     }
 
-    public String getDescription() {
-        return description;
-    }
+    //public String getName() {
+    //    return name;
+    //}
 
-    public long getId() {
-        return id;
-    }
+    //public String getDescription() {
+    //    return description;
+    //}
+
+    //public long getId() {
+    //    return id;
+    //}
 }

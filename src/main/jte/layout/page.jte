@@ -1,9 +1,11 @@
 <!-- src/main/jte/layout/page.jte -->
 @import gg.jte.Content
 @import org.example.hexlet.dto.courses.CoursesPage
+@import org.example.hexlet.dto.users.UsersPage
 
 @param Content content
-@param CoursesPage page
+<!-- @param CoursesPage page  -->
+<!-- @param UsersPage page    -->
 @param Content footer
 
 <!DOCTYPE html>
@@ -16,7 +18,7 @@
                     integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We"
                     crossorigin="anonymous">
         <title>Hexlet Javalin Example</title>
-        <h1>${page.getHeader()}</h1>
+        <!--       <h1>${page.getHeader()}</h1>  -->
         <nav>
             <ul>
                 <li><a href="/">Home</a></li>
@@ -26,6 +28,7 @@
     <body>
         <p>
             <a href="/courses">Courses</a>
+            <a href="/users">Users</a>
         </p>
         <div class="content">
             ${content}
