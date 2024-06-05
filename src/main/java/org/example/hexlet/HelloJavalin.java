@@ -5,8 +5,11 @@ import io.javalin.http.NotFoundResponse;
 import io.javalin.rendering.template.JavalinJte;
 import static io.javalin.rendering.template.TemplateUtil.model;
 
+import io.javalin.validation.ValidationException;
+import org.example.hexlet.dto.courses.BuildCoursePage;
 import org.example.hexlet.dto.courses.CoursePage;
 import org.example.hexlet.dto.courses.CoursesPage;
+import org.example.hexlet.dto.users.BuildUserPage;
 import org.example.hexlet.dto.users.UsersPage;
 import org.example.hexlet.model.Course;
 import org.example.hexlet.model.User;
@@ -27,17 +30,26 @@ public class HelloJavalin {
           // Обратите внимание, что id — это не обязательно число
 
           app.get("/users/build", ctx -> {
-               ctx.render("users/build.jte");
+               var page = new BuildUserPage();
+               ctx.render("users/build.jte", model("page", page));
           });
 
           app.post("/users", ctx -> {
                var name = ctx.formParam("name").trim();
                var email = ctx.formParam("email").trim().toLowerCase();
-               var password = ctx.formParam("password");
-               var passwordConfirmation = ctx.formParam("passwordConfirmation");
-               var user = new User(name, email, password);
-               UserRepository.save(user);
-               ctx.redirect("/users");
+
+               try {
+                    var passwordConfirmation = ctx.formParam("passwordConfirmation");
+                    var password = ctx.formParamAsClass("password", String.class)
+                            .check(value -> value.equals(passwordConfirmation), "Пароли не совпадают")
+                            .get();
+                    var user = new User(name, email, password);
+                    UserRepository.save(user);
+                    ctx.redirect("/users");
+               } catch (ValidationException e) {
+                    var page = new BuildUserPage(name, email, e.getErrors());
+                    ctx.render("users/build.jte", model("page", page));
+               }
           });
 
           app.get("/users", ctx -> {
@@ -47,15 +59,27 @@ public class HelloJavalin {
           });
 
           app.get("/courses/build", ctx -> {
-             ctx.render("courses/build.jte");
+               var page = new BuildCoursePage();
+               ctx.render("courses/build.jte", model("page", page));
           });
 
           app.post("/courses", ctx -> {
-             var name = ctx.formParam("name").trim();
-             var description = ctx.formParam("description").trim().toLowerCase();
-             var course = new Course(name, description);
-             CourseRepository.save(course);
-             ctx.redirect("/courses");
+               var name = ctx.formParam("name").trim();
+               var description = ctx.formParam("description").trim().toLowerCase();
+               try {
+                  name = ctx.formParamAsClass("name", String.class)
+                          .check(value -> value.trim().length() > 2, "Недостаточная длина названия курса")
+                          .get();
+                  description = ctx.formParamAsClass("description", String.class)
+                          .check(value -> value.trim().length() > 10, "Недостаточная длина описания курса")
+                          .get();
+                  var course = new Course(name, description);
+                  CourseRepository.save(course);
+                  ctx.redirect("/courses");
+             } catch (ValidationException e) {
+                  var page = new BuildCoursePage(name, description, e.getErrors());
+                  ctx.render("courses/build.jte", model("page", page));
+             }
           });
 
           app.get("/courses/{id}", ctx -> {
