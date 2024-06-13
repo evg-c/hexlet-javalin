@@ -1,7 +1,8 @@
-<!-- src/main/jte/courses/index.jte -->
-@import org.example.hexlet.dto.courses.CoursesPage
-@param CoursesPage page
 
+@import org.example.hexlet.dto.courses.CoursesPage
+@import org.example.hexlet.NamedRoutes
+@param CoursesPage page
+<!-- src/main/jte/courses/index.jte -->
 @template.layout.page(
     content = @`
         @if(page.getCourses().isEmpty())
@@ -14,13 +15,13 @@
                             ${course.getId()}
                         </td>
                         <td>
-                            <a href="/courses/${course.getId()}">${course.getName()}  ${course.getDescription()}</a>
+                            <a href="${NamedRoutes.coursePath(course.getId())}">${course.getName()}  ${course.getDescription()}</a>
                         </td>
                     </tr>
                 </div>
             @endfor
         @endif
-        <form action="/courses" method="get">
+        <form action="${NamedRoutes.coursesPath()}" method="get">
             <input type="search" required name="term" value="${page.getTerm()}" />
             <input type="submit" value="Искать" />
         </form>
