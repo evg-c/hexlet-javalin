@@ -1,13 +1,13 @@
-<!-- src/main/jte/layout/page.jte -->
+
 @import gg.jte.Content
 @import org.example.hexlet.dto.courses.CoursesPage
 @import org.example.hexlet.dto.users.UsersPage
 
 @param Content content
+@param Content footer
+<!-- src/main/jte/layout/page.jte -->
 <!-- @param CoursesPage page  -->
 <!-- @param UsersPage page    -->
-@param Content footer
-
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -27,8 +27,8 @@
     </head>
     <body>
         <p>
-            <a href="/courses">Courses</a>
-            <a href="/users">Users</a>
+            <a href="${org.example.hexlet.NamedRoutes.coursesPath()}">Courses</a>
+            <a href="${org.example.hexlet.NamedRoutes.usersPath()}">Users</a>
         </p>
         <div class="content">
             ${content}
