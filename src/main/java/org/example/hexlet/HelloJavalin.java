@@ -29,12 +29,12 @@ public class HelloJavalin {
           // описываем 
           // Обратите внимание, что id — это не обязательно число
 
-          app.get("/users/build", ctx -> {
+          app.get(NamedRoutes.buildUserPath(), ctx -> {
                var page = new BuildUserPage();
                ctx.render("users/build.jte", model("page", page));
           });
 
-          app.post("/users", ctx -> {
+          app.post(NamedRoutes.usersPath(), ctx -> {
                var name = ctx.formParam("name").trim();
                var email = ctx.formParam("email").trim().toLowerCase();
 
@@ -45,25 +45,25 @@ public class HelloJavalin {
                             .get();
                     var user = new User(name, email, password);
                     UserRepository.save(user);
-                    ctx.redirect("/users");
+                    ctx.redirect(NamedRoutes.usersPath());
                } catch (ValidationException e) {
                     var page = new BuildUserPage(name, email, e.getErrors());
                     ctx.render("users/build.jte", model("page", page));
                }
           });
 
-          app.get("/users", ctx -> {
+          app.get(NamedRoutes.usersPath(), ctx -> {
              var users = UserRepository.getEntities();
              var page = new UsersPage(users);
              ctx.render("users/index.jte", model("page", page));
           });
 
-          app.get("/courses/build", ctx -> {
+          app.get(NamedRoutes.buildCoursePath(), ctx -> {
                var page = new BuildCoursePage();
                ctx.render("courses/build.jte", model("page", page));
           });
 
-          app.post("/courses", ctx -> {
+          app.post(NamedRoutes.coursesPath(), ctx -> {
                var name = ctx.formParam("name").trim();
                var description = ctx.formParam("description").trim().toLowerCase();
                try {
@@ -75,14 +75,14 @@ public class HelloJavalin {
                           .get();
                   var course = new Course(name, description);
                   CourseRepository.save(course);
-                  ctx.redirect("/courses");
+                  ctx.redirect(NamedRoutes.coursesPath());
              } catch (ValidationException e) {
                   var page = new BuildCoursePage(name, description, e.getErrors());
                   ctx.render("courses/build.jte", model("page", page));
              }
           });
 
-          app.get("/courses/{id}", ctx -> {
+          app.get(NamedRoutes.coursePath("{id}"), ctx -> {
                var id = ctx.pathParamAsClass("id", Long.class).get();
                var courses = List.of(new Course("Java", "Программирование на Java", 1),
                        new Course("JavaScript", "Программирование на JavaScript", 2),
@@ -96,7 +96,7 @@ public class HelloJavalin {
                ctx.render("courses/show.jte", model("page", page));
           });
 
-          app.get("/courses", ctx -> {
+          app.get(NamedRoutes.coursesPath(), ctx -> {
                //var courses = /* Список курсов извлекается из базы данных */
                //var courses = List.of(new Course("Java", "Программирование на Java", 1),
                //        new Course("JavaScript", "Программирование на JavaScript", 2),
