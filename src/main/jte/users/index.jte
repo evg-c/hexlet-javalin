@@ -1,7 +1,7 @@
-<!-- src/main/jte/users/index.jte -->
+
 @import org.example.hexlet.dto.users.UsersPage
 @param UsersPage page
-
+<!-- src/main/jte/users/index.jte -->
 @template.layout.page(
     content = @`
         @if(page.getUsers().isEmpty())
