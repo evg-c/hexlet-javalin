@@ -27,7 +27,10 @@ public class UserRepository {
     }
 
     public static void delete(long id) {
-
+        // точно так ?
+        if (find(id) != null) {
+            entities.remove(find(id));
+        }
     }
 
     public static List<User> getEntities() {

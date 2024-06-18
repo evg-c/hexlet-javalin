@@ -3,12 +3,36 @@ package org.example.hexlet;
 public class NamedRoutes {
     // Маршрут пользователей
     public static String usersPath() {
-        return "/u";
+        return "/users";
     }
 
     // Маршрут создания пользователя
     public static String buildUserPath() {
-        return "/u/build";
+        return "/users/build";
+    }
+
+    public static String userPathId() {
+        return "/users/{id}";
+    }
+
+    public static String userPathIdEdit() {
+        return "/users/{id}/edit";
+    }
+
+    public static String userPath(Long id) {
+        return userPath(String.valueOf(id));
+    }
+
+    public static String userPath(String id) {
+        return "/users/" + id;
+    }
+
+    public static String userPathEdit(Long id) {
+        return userPathEdit(String.valueOf(id));
+    }
+
+    public static String userPathEdit(String id) {
+        return "/u/" + id + "/edit";
     }
 
     // Маршрут курсов

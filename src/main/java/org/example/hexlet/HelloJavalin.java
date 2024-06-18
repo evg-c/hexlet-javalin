@@ -6,6 +6,7 @@ import io.javalin.rendering.template.JavalinJte;
 import static io.javalin.rendering.template.TemplateUtil.model;
 
 import io.javalin.validation.ValidationException;
+import org.example.hexlet.controller.UsersController;
 import org.example.hexlet.dto.courses.BuildCoursePage;
 import org.example.hexlet.dto.courses.CoursePage;
 import org.example.hexlet.dto.courses.CoursesPage;
@@ -26,37 +27,43 @@ public class HelloJavalin {
                config.bundledPlugins.enableDevLogging();
                config.fileRenderer(new JavalinJte());
           });
-          // описываем 
-          // Обратите внимание, что id — это не обязательно число
 
-          app.get(NamedRoutes.buildUserPath(), ctx -> {
-               var page = new BuildUserPage();
-               ctx.render("users/build.jte", model("page", page));
-          });
+          app.get(NamedRoutes.usersPath(), UsersController::index);
+          //app.get(NamedRoutes.usersPath(), ctx -> {
+          //   var users = UserRepository.getEntities();
+          //   var page = new UsersPage(users);
+          //   ctx.render("users/index.jte", model("page", page));
+          //});
 
-          app.post(NamedRoutes.usersPath(), ctx -> {
-               var name = ctx.formParam("name").trim();
-               var email = ctx.formParam("email").trim().toLowerCase();
+          app.get(NamedRoutes.buildUserPath(), UsersController::build);
+          //app.get(NamedRoutes.buildUserPath(), ctx -> {
+          //     var page = new BuildUserPage();
+          //     ctx.render("users/build.jte", model("page", page));
+          //});
 
-               try {
-                    var passwordConfirmation = ctx.formParam("passwordConfirmation");
-                    var password = ctx.formParamAsClass("password", String.class)
-                            .check(value -> value.equals(passwordConfirmation), "Пароли не совпадают")
-                            .get();
-                    var user = new User(name, email, password);
-                    UserRepository.save(user);
-                    ctx.redirect(NamedRoutes.usersPath());
-               } catch (ValidationException e) {
-                    var page = new BuildUserPage(name, email, e.getErrors());
-                    ctx.render("users/build.jte", model("page", page));
-               }
-          });
+          app.post(NamedRoutes.usersPath(), UsersController::create);
+          //app.post(NamedRoutes.usersPath(), ctx -> {
+          //     var name = ctx.formParam("name").trim();
+          //     var email = ctx.formParam("email").trim().toLowerCase();
+          //
+          //     try {
+          //          var passwordConfirmation = ctx.formParam("passwordConfirmation");
+          //          var password = ctx.formParamAsClass("password", String.class)
+          //                  .check(value -> value.equals(passwordConfirmation), "Пароли не совпадают")
+          //                  .get();
+          //          var user = new User(name, email, password);
+          //          UserRepository.save(user);
+          //          ctx.redirect(NamedRoutes.usersPath());
+          //     } catch (ValidationException e) {
+          //          var page = new BuildUserPage(name, email, e.getErrors());
+          //          ctx.render("users/build.jte", model("page", page));
+          //     }
+          //});
 
-          app.get(NamedRoutes.usersPath(), ctx -> {
-             var users = UserRepository.getEntities();
-             var page = new UsersPage(users);
-             ctx.render("users/index.jte", model("page", page));
-          });
+          app.get(NamedRoutes.userPathId(), UsersController::show);
+          app.get(NamedRoutes.userPathIdEdit(), UsersController::edit);
+          app.patch(NamedRoutes.usersPath(), UsersController::update);
+          //app.delete(NamedRoutes.userPath("{id}"), UsersController::destroy);
 
           app.get(NamedRoutes.buildCoursePath(), ctx -> {
                var page = new BuildCoursePage();
