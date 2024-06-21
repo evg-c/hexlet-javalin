@@ -11,6 +11,7 @@ import java.util.Map;
 @NoArgsConstructor
 @Getter
 public class BuildUserPage {
+    private Long id;
     private String name;
     private String email;
     private Map<String, List<ValidationError<Object>>> errors;

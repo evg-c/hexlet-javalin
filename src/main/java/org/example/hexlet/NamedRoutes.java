@@ -32,7 +32,7 @@ public class NamedRoutes {
     }
 
     public static String userPathEdit(String id) {
-        return "/u/" + id + "/edit";
+        return "/users/" + id + "/edit";
     }
 
     // Маршрут курсов
@@ -53,5 +53,13 @@ public class NamedRoutes {
     // Маршрут создания курса
     public static String buildCoursePath() {
         return "/courses/build";
+    }
+
+    public static String coursePathId() {
+        return "/courses/{id}";
+    }
+
+    public static String coursePathIdEdit() {
+        return "/courses/{id}/edit";
     }
 }

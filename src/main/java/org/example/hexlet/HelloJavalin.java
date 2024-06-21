@@ -6,6 +6,7 @@ import io.javalin.rendering.template.JavalinJte;
 import static io.javalin.rendering.template.TemplateUtil.model;
 
 import io.javalin.validation.ValidationException;
+import org.example.hexlet.controller.CoursesController;
 import org.example.hexlet.controller.UsersController;
 import org.example.hexlet.dto.courses.BuildCoursePage;
 import org.example.hexlet.dto.courses.CoursePage;
@@ -29,97 +30,27 @@ public class HelloJavalin {
           });
 
           app.get(NamedRoutes.usersPath(), UsersController::index);
-          //app.get(NamedRoutes.usersPath(), ctx -> {
-          //   var users = UserRepository.getEntities();
-          //   var page = new UsersPage(users);
-          //   ctx.render("users/index.jte", model("page", page));
-          //});
-
           app.get(NamedRoutes.buildUserPath(), UsersController::build);
-          //app.get(NamedRoutes.buildUserPath(), ctx -> {
-          //     var page = new BuildUserPage();
-          //     ctx.render("users/build.jte", model("page", page));
-          //});
-
           app.post(NamedRoutes.usersPath(), UsersController::create);
-          //app.post(NamedRoutes.usersPath(), ctx -> {
-          //     var name = ctx.formParam("name").trim();
-          //     var email = ctx.formParam("email").trim().toLowerCase();
-          //
-          //     try {
-          //          var passwordConfirmation = ctx.formParam("passwordConfirmation");
-          //          var password = ctx.formParamAsClass("password", String.class)
-          //                  .check(value -> value.equals(passwordConfirmation), "Пароли не совпадают")
-          //                  .get();
-          //          var user = new User(name, email, password);
-          //          UserRepository.save(user);
-          //          ctx.redirect(NamedRoutes.usersPath());
-          //     } catch (ValidationException e) {
-          //          var page = new BuildUserPage(name, email, e.getErrors());
-          //          ctx.render("users/build.jte", model("page", page));
-          //     }
-          //});
-
           app.get(NamedRoutes.userPathId(), UsersController::show);
+
           app.get(NamedRoutes.userPathIdEdit(), UsersController::edit);
-          app.patch(NamedRoutes.usersPath(), UsersController::update);
-          //app.delete(NamedRoutes.userPath("{id}"), UsersController::destroy);
+          app.post(NamedRoutes.userPathId(), UsersController::update);
+          //app.patch(NamedRoutes.userPathId(), UsersController::update);
 
-          app.get(NamedRoutes.buildCoursePath(), ctx -> {
-               var page = new BuildCoursePage();
-               ctx.render("courses/build.jte", model("page", page));
-          });
+          app.delete(NamedRoutes.userPathId(), UsersController::destroy);
 
-          app.post(NamedRoutes.coursesPath(), ctx -> {
-               var name = ctx.formParam("name").trim();
-               var description = ctx.formParam("description").trim().toLowerCase();
-               try {
-                  name = ctx.formParamAsClass("name", String.class)
-                          .check(value -> value.trim().length() > 2, "Недостаточная длина названия курса")
-                          .get();
-                  description = ctx.formParamAsClass("description", String.class)
-                          .check(value -> value.trim().length() > 10, "Недостаточная длина описания курса")
-                          .get();
-                  var course = new Course(name, description);
-                  CourseRepository.save(course);
-                  ctx.redirect(NamedRoutes.coursesPath());
-             } catch (ValidationException e) {
-                  var page = new BuildCoursePage(name, description, e.getErrors());
-                  ctx.render("courses/build.jte", model("page", page));
-             }
-          });
+          app.get(NamedRoutes.buildCoursePath(), CoursesController::build);
+          app.post(NamedRoutes.coursesPath(), CoursesController::create);
 
-          app.get(NamedRoutes.coursePath("{id}"), ctx -> {
-               var id = ctx.pathParamAsClass("id", Long.class).get();
-               var courses = List.of(new Course("Java", "Программирование на Java", 1),
-                       new Course("JavaScript", "Программирование на JavaScript", 2),
-                       new Course("Go", "Программирование на Go", 3));
-               //var course = /* Курс извлекается из базы данных */
-               var course = findCourse(courses, id);
-               if (course == null) {
-                    throw new NotFoundResponse("Course not found");
-               }
-               var page = new CoursePage(course);
-               ctx.render("courses/show.jte", model("page", page));
-          });
+          app.get(NamedRoutes.coursePathId(), CoursesController::show);
+          app.get(NamedRoutes.coursesPath(), CoursesController::index);
 
-          app.get(NamedRoutes.coursesPath(), ctx -> {
-               //var courses = /* Список курсов извлекается из базы данных */
-               //var courses = List.of(new Course("Java", "Программирование на Java", 1),
-               //        new Course("JavaScript", "Программирование на JavaScript", 2),
-               //        new Course("Go", "Программирование на Go", 3));
-               var courses = CourseRepository.getEntities();
-               var header = "Курсы по программированию";
-               List<Course> coursesTerm;
-               var term = ctx.queryParam("term");
-               if (term != null) {
-                    coursesTerm = findCoursesTerm(courses, term);
-               } else {
-                    coursesTerm = courses;
-               }
-               var page = new CoursesPage(coursesTerm, header, term);
-               ctx.render("courses/index.jte", model("page", page));
-          });
+          app.get(NamedRoutes.coursePathIdEdit(), CoursesController::edit);
+          app.post(NamedRoutes.coursePathId(), CoursesController::update);
+          //app.patch(NamedRoutes.coursePathId(), CoursesController::update);
+
+          app.delete(NamedRoutes.coursePathId(), CoursesController::destroy);
 
           app.get("/", ctx -> ctx.render("index.jte"));
 

@@ -34,6 +34,7 @@ public class UsersController {
     public static void create(Context ctx) {
         var name = ctx.formParam("name").trim();
         var email = ctx.formParam("email").trim().toLowerCase();
+        long id = 0;
         try {
             var passwordConfirmation = ctx.formParam("passwordConfirmation");
             var password = ctx.formParamAsClass("password", String.class)
@@ -41,9 +42,10 @@ public class UsersController {
                     .get();
             var user = new User(name, email, password);
             UserRepository.save(user);
+            id = user.getId();
             ctx.redirect(NamedRoutes.usersPath());
         } catch (ValidationException e) {
-            var page = new BuildUserPage(name, email, e.getErrors());
+            var page = new BuildUserPage(id, name, email, e.getErrors());
             ctx.render("users/build.jte", model("page", page));
         }
     }
@@ -54,7 +56,7 @@ public class UsersController {
                 .orElseThrow(() -> new NotFoundResponse("Entity with id = " + id + " not found"));
         var name = user.getName();
         var email = user.getEmail();
-        var page = new BuildUserPage(name, email, null);
+        var page = new BuildUserPage(id, name, email, null);
         ctx.render("users/edit.jte", model("page", page));
     }
 
@@ -72,10 +74,9 @@ public class UsersController {
             user.setName(name);
             user.setEmail(email);
             user.setPassword(password);
-            UserRepository.save(user);
             ctx.redirect(NamedRoutes.userPath(id));
         } catch (ValidationException e) {
-            var page = new BuildUserPage(name, email, e.getErrors());
+            var page = new BuildUserPage(id, name, email, e.getErrors());
             ctx.render("users/edit.jte", model("page", page));
         }
     }

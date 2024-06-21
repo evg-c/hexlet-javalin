@@ -3,7 +3,6 @@
 @import org.example.hexlet.model.User
 @import javax.lang.model.element.Name
 @param BuildUserPage page
-@param User user
 
 @if(page.getErrors() != null)
     <ul>
@@ -27,7 +26,8 @@
         <title>User edit</title>
     </head>
     <body>
-        <form action="${NamedRoutes.usersPath()}" method="patch">
+        <form action="${NamedRoutes.usersPath()}/${page.getId()}" method="post">
+            <input type="hidden" name="_method" value="PATCH">
             <div>
                 <label>
                     Имя

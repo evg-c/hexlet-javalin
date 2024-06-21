@@ -28,7 +28,7 @@
       <div>
         <label>
           Название курса
-          <input type="text" name="name" value="${page.getName()}" "/>
+          <input type="text" name="name" value="${page.getName()}" />
         </label>
       </div>
       <div>

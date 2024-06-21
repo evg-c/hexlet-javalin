@@ -12,6 +12,7 @@ import java.util.Map;
 @NoArgsConstructor
 @Getter
 public class BuildCoursePage {
+    private Long id;
     private String name;
     private String description;
     private Map<String, List<ValidationError<Object>>> errors;
