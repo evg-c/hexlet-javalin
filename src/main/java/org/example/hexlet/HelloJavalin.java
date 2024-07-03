@@ -8,6 +8,7 @@ import static io.javalin.rendering.template.TemplateUtil.model;
 import io.javalin.validation.ValidationException;
 import org.example.hexlet.controller.CoursesController;
 import org.example.hexlet.controller.UsersController;
+import org.example.hexlet.dto.MainPage;
 import org.example.hexlet.dto.courses.BuildCoursePage;
 import org.example.hexlet.dto.courses.CoursePage;
 import org.example.hexlet.dto.courses.CoursesPage;
@@ -52,7 +53,12 @@ public class HelloJavalin {
 
           app.delete(NamedRoutes.coursePathId(), CoursesController::destroy);
 
-          app.get("/", ctx -> ctx.render("index.jte"));
+          app.get("/", ctx -> {
+               var visited = Boolean.valueOf(ctx.cookie("visited"));
+               var page = new MainPage(visited);
+               ctx.render("index.jte", model("page", page));
+               ctx.cookie("visited", String.valueOf(true));
+          });
 
           app.start(7070);
      }
