@@ -7,8 +7,10 @@ import static io.javalin.rendering.template.TemplateUtil.model;
 
 import io.javalin.validation.ValidationException;
 import org.example.hexlet.controller.CoursesController;
+import org.example.hexlet.controller.SessionsController;
 import org.example.hexlet.controller.UsersController;
 import org.example.hexlet.dto.MainPage;
+import org.example.hexlet.dto.MainPage2;
 import org.example.hexlet.dto.courses.BuildCoursePage;
 import org.example.hexlet.dto.courses.CoursePage;
 import org.example.hexlet.dto.courses.CoursesPage;
@@ -37,7 +39,6 @@ public class HelloJavalin {
 
           app.get(NamedRoutes.userPathIdEdit(), UsersController::edit);
           app.post(NamedRoutes.userPathId(), UsersController::update);
-          //app.patch(NamedRoutes.userPathId(), UsersController::update);
 
           app.delete(NamedRoutes.userPathId(), UsersController::destroy);
 
@@ -49,15 +50,22 @@ public class HelloJavalin {
 
           app.get(NamedRoutes.coursePathIdEdit(), CoursesController::edit);
           app.post(NamedRoutes.coursePathId(), CoursesController::update);
-          //app.patch(NamedRoutes.coursePathId(), CoursesController::update);
 
           app.delete(NamedRoutes.coursePathId(), CoursesController::destroy);
 
+          app.get(NamedRoutes.buildSessionPath(), SessionsController::build);
+          app.post(NamedRoutes.sessionsPath(), SessionsController::create);
+          app.delete(NamedRoutes.sessionsPath(), SessionsController::destroy);
+
+//          app.get("/", ctx -> {
+//               var visited = Boolean.valueOf(ctx.cookie("visited"));
+//               var page = new MainPage(visited);
+//               ctx.render("index.jte", model("page", page));
+//               ctx.cookie("visited", String.valueOf(true));
+//          });
           app.get("/", ctx -> {
-               var visited = Boolean.valueOf(ctx.cookie("visited"));
-               var page = new MainPage(visited);
-               ctx.render("index.jte", model("page", page));
-               ctx.cookie("visited", String.valueOf(true));
+               var page = new MainPage2(ctx.sessionAttribute("currentUser"));
+               ctx.render("index2.jte", model("page", page));
           });
 
           app.start(7070);

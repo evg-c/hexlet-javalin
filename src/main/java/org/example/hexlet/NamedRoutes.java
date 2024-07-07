@@ -62,4 +62,12 @@ public class NamedRoutes {
     public static String coursePathIdEdit() {
         return "/courses/{id}/edit";
     }
+
+    public static String sessionsPath() {
+        return "/sessions";
+    }
+
+    public static String buildSessionPath() {
+        return "/sessions/build";
+    }
 }
