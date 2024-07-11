@@ -3,6 +3,7 @@
 @param UsersPage page
 <!-- src/main/jte/users/index.jte -->
 @template.layout.page(
+    page = page,
     content = @`
         @if(page.getUsers().isEmpty())
             <p>Пока не добавлено ни одного пользователя</p>

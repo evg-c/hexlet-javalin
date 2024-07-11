@@ -2,6 +2,11 @@
 @import org.example.hexlet.dto.users.BuildUserPage
 @param BuildUserPage page
 
+@if(page != null && page.getFlash() != null)
+    <div class="alert alert-danger" role="alert">
+        <p>${page.getFlash()}</p>
+    </div>
+@endif
 @if(page.getErrors() != null)
     <ul>
         @for(var validator: page.getErrors().values())

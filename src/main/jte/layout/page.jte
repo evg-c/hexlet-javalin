@@ -2,9 +2,11 @@
 @import gg.jte.Content
 @import org.example.hexlet.dto.courses.CoursesPage
 @import org.example.hexlet.dto.users.UsersPage
+@import org.example.hexlet.dto.BasePage
 
 @param Content content
 @param Content footer
+@param BasePage page
 <!-- src/main/jte/layout/page.jte -->
 <!-- @param CoursesPage page  -->
 <!-- @param UsersPage page    -->
@@ -26,6 +28,11 @@
         </nav>
     </head>
     <body>
+        @if(page != null && page.getFlash() != null)
+            <div class="alert alert-success" role="alert">
+                <p>${page.getFlash()}</p>
+            </div>
+        @endif
         <p>
             <a href="${org.example.hexlet.NamedRoutes.coursesPath()}">Courses</a>
             <a href="${org.example.hexlet.NamedRoutes.usersPath()}">Users</a>
