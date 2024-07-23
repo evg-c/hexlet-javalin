@@ -12,6 +12,7 @@ import org.example.hexlet.model.Course;
 import org.example.hexlet.repository.CourseRepository;
 import org.example.hexlet.repository.UserRepository;
 
+import java.sql.SQLException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -23,7 +24,7 @@ public class CoursesController {
         ctx.render("courses/build.jte", model("page", page));
     }
 
-    public static void create(Context ctx) {
+    public static void create(Context ctx) throws SQLException {
         long id = 0;
         var name = ctx.formParam("name").trim();
         var description = ctx.formParam("description").trim().toLowerCase();
@@ -44,7 +45,7 @@ public class CoursesController {
         }
     }
 
-    public static void show(Context ctx) {
+    public static void show(Context ctx) throws SQLException {
         var id = ctx.pathParamAsClass("id", Long.class).get();
         //var courses =
                 //List.of(new Course("Java", "Программирование на Java", 1),
@@ -57,7 +58,7 @@ public class CoursesController {
         ctx.render("courses/show.jte", model("page", page));
     }
 
-    public static void index(Context ctx) {
+    public static void index(Context ctx) throws SQLException {
         var courses = CourseRepository.getEntities();
         var header = "Курсы по программированию";
         List<Course> coursesTerm;
@@ -71,7 +72,7 @@ public class CoursesController {
         ctx.render("courses/index.jte", model("page", page));
     }
 
-    public static void edit(Context ctx) {
+    public static void edit(Context ctx) throws SQLException {
         var id = ctx.pathParamAsClass("id", Long.class).get();
         var course = CourseRepository.find(id)
                 .orElseThrow(() -> new NotFoundResponse("Entity with id = " + id + " not found"));
@@ -81,7 +82,7 @@ public class CoursesController {
         ctx.render("courses/edit.jte", model("page", page));
     }
 
-    public static void update(Context ctx) {
+    public static void update(Context ctx) throws SQLException {
         var id = ctx.pathParamAsClass("id", Long.class).get();
         var name = ctx.formParam("name").trim();
         var description = ctx.formParam("description").trim().toLowerCase();
@@ -96,6 +97,7 @@ public class CoursesController {
                     .orElseThrow(() -> new NotFoundResponse("Entity with id = " + id + " not found"));
             course.setName(name);
             course.setDescription(description);
+            CourseRepository.update(course);
             ctx.redirect(NamedRoutes.coursePath(id));
         } catch (ValidationException e) {
             var page = new BuildCoursePage(id, name, description, e.getErrors());
@@ -103,10 +105,11 @@ public class CoursesController {
         }
     }
 
-    public static void destroy(Context ctx) {
+    public static void destroy(Context ctx) throws SQLException {
         var id = ctx.formParamAsClass("id", Long.class).get();
-
+        CourseRepository.delete(id);
     }
+
     public static Course findCourse(List<Course> listCourses, long idCourse) {
         return listCourses.stream()
                 .filter(u -> idCourse == u.getId())

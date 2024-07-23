@@ -1,8 +1,7 @@
-
 @import org.example.hexlet.dto.courses.CoursesPage
 @import org.example.hexlet.NamedRoutes
 @param CoursesPage page
-<!-- src/main/jte/courses/index.jte -->
+
 @template.layout.page(
     content = @`
         @if(page.getCourses().isEmpty())

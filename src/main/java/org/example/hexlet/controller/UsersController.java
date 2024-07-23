@@ -11,15 +11,17 @@ import org.example.hexlet.dto.users.UsersPage;
 import org.example.hexlet.model.User;
 import org.example.hexlet.repository.UserRepository;
 
+import java.sql.SQLException;
+
 public class UsersController {
-    public static void index(Context ctx) {
+    public static void index(Context ctx) throws SQLException {
         var users = UserRepository.getEntities();
         var page = new UsersPage(users);
         page.setFlash(ctx.consumeSessionAttribute("flash"));
         ctx.render("users/index.jte", model("page", page));
     }
 
-    public static void show(Context ctx) {
+    public static void show(Context ctx) throws SQLException {
         var id = ctx.pathParamAsClass("id", Long.class).get();
         var user = UserRepository.find(id)
                 .orElseThrow(() -> new NotFoundResponse("Entity with id = " + id + " not found"));
@@ -32,7 +34,7 @@ public class UsersController {
         ctx.render("users/build.jte", model("page", page));
     }
 
-    public static void create(Context ctx) {
+    public static void create(Context ctx) throws SQLException {
         var name = ctx.formParam("name").trim();
         var email = ctx.formParam("email").trim().toLowerCase();
         long id = 0;
@@ -54,7 +56,7 @@ public class UsersController {
         }
     }
 
-    public static void edit(Context ctx) {
+    public static void edit(Context ctx) throws SQLException {
         var id = ctx.pathParamAsClass("id", Long.class).get();
         var user = UserRepository.find(id)
                 .orElseThrow(() -> new NotFoundResponse("Entity with id = " + id + " not found"));
@@ -64,7 +66,7 @@ public class UsersController {
         ctx.render("users/edit.jte", model("page", page));
     }
 
-    public static void update(Context ctx) {
+    public static void update(Context ctx) throws SQLException {
         var id = ctx.pathParamAsClass("id", Long.class).get();
         var name = ctx.formParam("name").trim();
         var email = ctx.formParam("email").trim().toLowerCase();
@@ -78,6 +80,7 @@ public class UsersController {
             user.setName(name);
             user.setEmail(email);
             user.setPassword(password);
+            UserRepository.update(user);
             ctx.redirect(NamedRoutes.userPath(id));
         } catch (ValidationException e) {
             var page = new BuildUserPage(id, name, email, e.getErrors());
@@ -85,7 +88,7 @@ public class UsersController {
         }
     }
 
-    public static void destroy(Context ctx) {
+    public static void destroy(Context ctx) throws SQLException {
         var id = ctx.pathParamAsClass("id", Long.class).get();
         UserRepository.delete(id);
         ctx.redirect(NamedRoutes.usersPath());

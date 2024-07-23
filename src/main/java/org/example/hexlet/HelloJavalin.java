@@ -1,31 +1,43 @@
 package org.example.hexlet;
 
+import com.zaxxer.hikari.HikariConfig;
+import com.zaxxer.hikari.HikariDataSource;
 import io.javalin.Javalin;
-import io.javalin.http.NotFoundResponse;
 import io.javalin.rendering.template.JavalinJte;
 import static io.javalin.rendering.template.TemplateUtil.model;
 
-import io.javalin.validation.ValidationException;
 import org.example.hexlet.controller.CoursesController;
 import org.example.hexlet.controller.SessionsController;
 import org.example.hexlet.controller.UsersController;
-import org.example.hexlet.dto.MainPage;
 import org.example.hexlet.dto.MainPage2;
-import org.example.hexlet.dto.courses.BuildCoursePage;
-import org.example.hexlet.dto.courses.CoursePage;
-import org.example.hexlet.dto.courses.CoursesPage;
-import org.example.hexlet.dto.users.BuildUserPage;
-import org.example.hexlet.dto.users.UsersPage;
 import org.example.hexlet.model.Course;
-import org.example.hexlet.model.User;
-import org.example.hexlet.repository.CourseRepository;
-import org.example.hexlet.repository.UserRepository;
+import org.example.hexlet.repository.BaseRepository;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import java.util.List;
 import java.util.stream.Collectors;
 
 public class HelloJavalin {
-     public static void main(String[] args) {
+     public static Javalin getApp() throws Exception {
+
+          var hikariConfig = new HikariConfig();
+          hikariConfig.setJdbcUrl("jdbc:h2:mem:project;DB_CLOSE_DELAY=-1;");
+
+          var dataSource = new HikariDataSource(hikariConfig);
+          // получаем путь до файла в src/main/resources
+          var url = HelloJavalin.class.getClassLoader().getResourceAsStream("schema.sql");
+          var sql = new BufferedReader(new InputStreamReader(url))
+                  .lines()
+                  .collect(Collectors.joining("\n"));
+
+          // получаем соединение, создаем стейтмент и выполняем запрос
+          try (var connection = dataSource.getConnection();
+               var statement = connection.createStatement()) {
+               statement.execute(sql);
+          }
+          BaseRepository.dataSource = dataSource;
+
           // создаем приложение
           var app = Javalin.create(config -> {
                config.bundledPlugins.enableDevLogging();
@@ -68,6 +80,11 @@ public class HelloJavalin {
                ctx.render("index2.jte", model("page", page));
           });
 
+          return app;
+     }
+
+     public static void main(String[] args) throws Exception {
+          Javalin app = getApp();
           app.start(7070);
      }
 

@@ -6,7 +6,7 @@
 
 @param Content content
 @param Content footer
-@param BasePage page
+@param BasePage page = null
 <!-- src/main/jte/layout/page.jte -->
 <!-- @param CoursesPage page  -->
 <!-- @param UsersPage page    -->
@@ -20,7 +20,6 @@
                     integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We"
                     crossorigin="anonymous">
         <title>Hexlet Javalin Example</title>
-        <!--       <h1>${page.getHeader()}</h1>  -->
         <nav>
             <ul>
                 <li><a href="/">Home</a></li>
