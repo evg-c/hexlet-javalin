@@ -1,8 +1,8 @@
 FROM gradle:8.2.1-jdk17
 
-WORKDIR /HexletJavalin
+WORKDIR /app
 
-COPY /HexletJavalin .
+COPY /app .
 
 RUN gradle installDist
 
