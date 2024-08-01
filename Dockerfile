@@ -1,8 +1,8 @@
 FROM gradle:8.2.1-jdk17
 
-WORKDIR /HelloJavalin
+WORKDIR /app
 
-COPY /HelloJavalin .
+COPY . /app
 
 RUN gradle installDist
 
