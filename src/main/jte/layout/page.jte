@@ -27,15 +27,15 @@
         </nav>
     </head>
     <body>
+        <p>
+            <a href="${org.example.hexlet.NamedRoutes.coursesPath()}">Courses</a>
+            <a href="${org.example.hexlet.NamedRoutes.usersPath()}">Users</a>
+        </p>
         @if(page != null && page.getFlash() != null)
             <div class="alert alert-success" role="alert">
                 <p>${page.getFlash()}</p>
             </div>
         @endif
-        <p>
-            <a href="${org.example.hexlet.NamedRoutes.coursesPath()}">Courses</a>
-            <a href="${org.example.hexlet.NamedRoutes.usersPath()}">Users</a>
-        </p>
         <div class="content">
             ${content}
         </div>

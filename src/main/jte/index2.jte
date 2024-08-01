@@ -12,6 +12,10 @@
     <body>
         <main>
             <h1>Привет, Hexlet!</h1>
+            <p>
+                <a href="${org.example.hexlet.NamedRoutes.coursesPath()}">Courses</a>
+                <a href="${org.example.hexlet.NamedRoutes.usersPath()}">Users</a>
+            </p>
             @if(page.getCurrentUser() != null)
                 Добро пожаловать, ${page.getCurrentUser()}.
                 Чтобы разлогиниться, удалите куку JSESSIONID из браузера

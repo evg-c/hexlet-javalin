@@ -1,4 +1,4 @@
-
+@import org.example.hexlet.NamedRoutes
 @import org.example.hexlet.dto.users.UsersPage
 @param UsersPage page
 <!-- src/main/jte/users/index.jte -->
@@ -21,6 +21,7 @@
                 </div>
             @endfor
         @endif
+        <a href="${NamedRoutes.buildUserPath()}">Добавить пользователя</a>
     `,
     footer = @`
         <p>Thank for visiting</p>

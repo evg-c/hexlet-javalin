@@ -20,6 +20,7 @@
                 </div>
             @endfor
         @endif
+        <a href="${NamedRoutes.buildCoursePath()}">Добавить курс</a>
         <form action="${NamedRoutes.coursesPath()}" method="get">
             <input type="search" required name="term" value="${page.getTerm()}" />
             <input type="submit" value="Искать" />

@@ -63,6 +63,14 @@ public class NamedRoutes {
         return "/courses/{id}/edit";
     }
 
+    public static String coursePathEdit(Long id) {
+        return coursePathEdit(String.valueOf(id));
+    }
+
+    public static String coursePathEdit(String id) {
+        return "/courses/" + id + "/edit";
+    }
+
     public static String sessionsPath() {
         return "/sessions";
     }
